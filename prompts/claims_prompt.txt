@@ -1,0 +1,28 @@
+Extract factual claims and named entities from the following {platform} content.
+
+Headline: {headline}
+
+Content:
+\"\"\"
+{content}
+\"\"\"
+
+Respond in Markdown with EXACTLY these sections (use "- None found" if a section is empty):
+
+## Main Factual Claims
+Bullet list of checkable factual assertions made in the content (not opinions).
+
+## Numbers & Statistics
+Any figures, percentages, dates or quantities mentioned.
+
+## People Mentioned
+Named individuals.
+
+## Organizations Mentioned
+Companies, agencies, governments, groups.
+
+## Locations
+Places referenced.
+
+## Events & Dates
+Specific events or time references.

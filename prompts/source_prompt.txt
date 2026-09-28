@@ -1,0 +1,23 @@
+Analyze the credibility of the SOURCE of the following content.
+
+Source URL: {url}
+Platform type: {platform}
+Author/Page name: {author}
+Headline: {headline}
+
+Respond in Markdown with EXACTLY these sections:
+
+## Source Identification
+The domain/platform and the author or page name, if identifiable.
+
+## Domain Reputation
+Classify the domain as **Recognized** (well-known outlet/platform), **Unknown**, or **User-Generated Content** (social media). Explain what is and is not known about it.
+
+## Transparency Indicators
+Bullet points: does the content show an author, a date, citations/links to sources, an about page, contact info — or are these missing?
+
+## Limitations
+Explain clearly what cannot be determined about the source's credibility from the URL and content alone. Never claim a source is trustworthy or untrustworthy without evidence.
+
+## Verdict
+One line: **Higher / Moderate / Low / Indeterminate** credibility signal, with a one-line justification.

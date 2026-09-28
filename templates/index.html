@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ app_name }} | {{ brand }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-white to-blue-100 min-h-screen text-slate-800">
+
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 shrink-0 glass border-r border-blue-100 p-5 flex flex-col gap-2 sticky top-0 h-screen">
+    <div class="flex items-center gap-2 mb-1">
+      <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold">W</div>
+      <div>
+        <h1 class="text-sm font-bold text-blue-700 leading-tight">{{ app_name }}</h1>
+        <p class="text-[11px] text-slate-500">{{ brand }}</p>
+      </div>
+    </div>
+
+    <nav class="flex flex-col gap-1 mt-5 text-sm font-medium">
+      <a href="#card-input" class="nav-btn"><i data-lucide="scan-search"></i> Analyze URL</a>
+      <a href="#card-summary" class="nav-btn"><i data-lucide="file-text"></i> Summary</a>
+      <a href="#card-claims" class="nav-btn"><i data-lucide="list-checks"></i> Claims</a>
+      <a href="#card-misinfo" class="nav-btn"><i data-lucide="alert-triangle"></i> Misinformation Indicators</a>
+      <a href="#card-source" class="nav-btn"><i data-lucide="building-2"></i> Source Analysis</a>
+      <a href="#card-factcheck" class="nav-btn"><i data-lucide="shield-check"></i> Fact Check Suggestions</a>
+    </nav>
+
+    <div class="mt-auto text-xs text-slate-500">
+      <p>Support:</p>
+      <a href="mailto:{{ support_email }}" class="text-blue-600 hover:underline break-all">{{ support_email }}</a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 p-6 lg:p-8 max-w-[1200px] space-y-5">
+
+    {% if env_missing %}
+    <div class="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+      Missing environment variables: <code>{{ env_missing|join(', ') }}</code>.
+      Copy <code>.env.example</code> to <code>.env</code> and add your Groq API key.
+    </div>
+    {% endif %}
+
+    <div id="error-card" class="hidden rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700"></div>
+
+    <!-- Input card -->
+    <section id="card-input" class="glass rounded-2xl p-5">
+      <h2 class="text-lg font-bold text-blue-800 flex items-center gap-2"><i data-lucide="scan-search" class="w-5 h-5"></i> Analyze URL</h2>
+      <p class="text-sm text-slate-500 mb-3">Paste a social media post or news article URL. Supports X/Twitter, Instagram, Facebook, LinkedIn and news sites.</p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input id="url-input" type="url" placeholder="https://example.com/news-article" class="flex-1 rounded-xl border border-blue-200 bg-white/80 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <button id="analyze-btn" class="btn-primary">Analyze</button>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 mt-3 text-xs text-slate-500">
+        <span>Try:</span>
+        <button class="sample-btn" data-url="https://www.bbc.com/news">bbc.com/news</button>
+        <button class="sample-btn" data-url="https://www.reuters.com">reuters.com</button>
+        <button class="sample-btn" data-url="https://en.wikipedia.org/wiki/Fake_news">wikipedia.org/wiki/Fake_news</button>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-3">
+        <button id="copy-btn" class="btn-mini hidden"><i data-lucide="copy" class="w-3.5 h-3.5 inline"></i> Copy Analysis</button>
+        <button id="download-btn" class="btn-mini hidden"><i data-lucide="download" class="w-3.5 h-3.5 inline"></i> Download Markdown</button>
+        <button id="clear-btn" class="btn-mini hidden"><i data-lucide="trash-2" class="w-3.5 h-3.5 inline"></i> Clear Results</button>
+      </div>
+      <div id="spinner" class="hidden spinner-wrap">
+        <div class="spinner"></div>
+        <p class="text-sm text-blue-600 mt-2" id="spinner-text">Extracting content & analyzing...</p>
+      </div>
+      <!-- Module progress chips -->
+      <div id="status-bar" class="hidden flex flex-wrap gap-2 mt-4 pt-4 border-t border-blue-100">
+        <span class="status-chip" data-status="credibility"><i data-lucide="gauge"></i> Credibility</span>
+        <span class="status-chip" data-status="summary"><i data-lucide="file-text"></i> Summary</span>
+        <span class="status-chip" data-status="claims"><i data-lucide="list-checks"></i> Claims</span>
+        <span class="status-chip" data-status="misinfo"><i data-lucide="alert-triangle"></i> Misinformation</span>
+        <span class="status-chip" data-status="source"><i data-lucide="building-2"></i> Source</span>
+        <span class="status-chip" data-status="factcheck"><i data-lucide="shield-check"></i> Fact Check</span>
+      </div>
+    </section>
+
+    <!-- Article preview -->
+    <section id="card-preview" class="glass rounded-2xl p-5 hidden">
+      <h3 class="card-title"><i data-lucide="newspaper"></i> Article Preview</h3>
+      <div id="preview-body" class="text-sm"></div>
+    </section>
+
+    <!-- Output cards -->
+    {% for id, icon, title in [
+      ("credibility", "gauge", "Credibility Assessment"),
+      ("summary", "file-text", "Summary"),
+      ("claims", "list-checks", "Claims Extracted"),
+      ("misinfo", "alert-triangle", "Misinformation Indicators"),
+      ("source", "building-2", "Source Analysis"),
+      ("factcheck", "shield-check", "Fact Check Suggestions"),
+    ] %}
+    <section id="card-{{ id }}" class="glass rounded-2xl p-5 hidden card-animate">
+      <h3 class="card-title"><i data-lucide="{{ icon }}"></i> {{ title }}</h3>
+      <div id="out-{{ id }}" class="md-body prose prose-sm max-w-none text-sm"></div>
+    </section>
+    {% endfor %}
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden"></div>
+  </main>
+</div>
+
+<script src="/static/js/app.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

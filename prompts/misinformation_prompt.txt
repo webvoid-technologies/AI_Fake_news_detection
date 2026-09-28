@@ -1,0 +1,22 @@
+Analyze the following {platform} content for misinformation indicators and manipulative rhetoric.
+
+Headline: {headline}
+
+Content:
+\"\"\"
+{content}
+\"\"\"
+
+For each indicator below, state whether it was DETECTED or NOT DETECTED and explain with a quoted example from the text when detected:
+
+## Clickbait Language
+## Emotional Manipulation
+## Fear-Based Wording
+## Unsupported Claims
+## Missing Context
+## Opinion Presented as Fact
+## Other Misinformation Indicators
+(e.g. vague sourcing like "experts say", conspiracy framing, doctored-media hints, calls to urgency)
+
+## Overall Assessment
+1-2 sentences summarizing how manipulative the rhetoric is overall.

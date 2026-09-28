@@ -1,0 +1,27 @@
+Analyze the credibility of the following {platform} content.
+
+Source URL: {url}
+Author/Page: {author}
+Published: {published_date}
+
+Headline: {headline}
+
+Content:
+\"\"\"
+{content}
+\"\"\"
+
+Respond in Markdown with EXACTLY these sections:
+
+## Credibility Assessment
+State exactly ONE verdict on its own line, chosen from:
+**Likely Credible** | **Likely Misleading** | **Likely False** | **Unverifiable**
+
+## Confidence
+Give a percentage estimate (e.g. 72%) and 1-2 sentences explaining why your confidence is at that level and what would change it.
+
+## Reasoning
+Bullet points explaining the evidence in the content that led to your verdict. Quote or reference specific phrases.
+
+## Important Caveats
+What this analysis cannot determine from the extracted text alone (e.g. whether specific factual claims are actually true).

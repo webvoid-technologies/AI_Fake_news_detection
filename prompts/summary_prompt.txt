@@ -1,0 +1,23 @@
+Objectively summarize the following {platform} content.
+
+Headline: {headline}
+Author/Page: {author}
+
+Content:
+\"\"\"
+{content}
+\"\"\"
+
+Respond in Markdown with EXACTLY these sections:
+
+## Summary
+A neutral 3-5 sentence summary of the content. Do not add information not present in the text.
+
+## Key Topic
+One line naming the main subject.
+
+## Important Takeaways
+3-5 bullet points of the main points made.
+
+## Entities Involved
+Bullet list of the key people, organizations and places mentioned.
